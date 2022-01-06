@@ -1,49 +1,20 @@
-import React, { useState, useEffect, useRef } from "react"
+import React from "react"
+import useWordGame from "./hooks/useWordGame"
 import './styles.css'
 
 function App() {
-  const STARTING_TIME = 5
-  const [text, setText] = useState("")
-  const [timeRemaining, setTimeRemaining] = useState(STARTING_TIME)
-  const [isTimeRunning, setIsTimeRunning] = useState(false)
-  const [wordCount, setWordCount] = useState(0)
-  const textBoxRef = useRef(null)
-
-  function handleChange(event) {
-    const { value } = event.target
-    setText(value)
-  }
-
-  function calculateWordCount(text) {
-    const words = text.trim().split(" ")
-    const filteredWords = words.filter(word => word !== "") //to convert an empty array from [''] --> []
-    return filteredWords.length
-  }
-
-  function startGame() {
-    setIsTimeRunning(true)
-    setTimeRemaining(STARTING_TIME)
-    setText("")
-    // setWordCount(0)
-    textBoxRef.current.disabled = false
-    textBoxRef.current.focus()
-  }
-
-  function endGame() {
-    setIsTimeRunning(false)
-    setWordCount(calculateWordCount(text))
-  }
-
-  useEffect(() => {
-    if (isTimeRunning && timeRemaining > 0) {
-      setTimeout(() => {
-        setTimeRemaining(currentTime => currentTime - 1)
-      }, 1000);
-    } else if (timeRemaining === 0) {
-      endGame()
-    }
-  }, [isTimeRunning, timeRemaining])
-
+  
+  const { 
+    text, 
+    isTimeRunning, 
+    timeRemaining, 
+    wordCount, 
+    textBoxRef, 
+    handleChange, 
+    startGame, 
+    endGame 
+  } = useWordGame()
+  
   return (
     <div>
       <h1>How fast can you type?</h1>
